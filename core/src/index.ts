@@ -69,22 +69,14 @@ app.get('/', (c) => {
     version: '1.0.0',
     environment: env.NODE_ENV,
     documentation: {
-      swagger: '/swagger',
-      openapi: '/api/v1/openapi.json',
-      interactive: '/api/docs'
+      openapi: '/api/openapi.json',
     },
-    endpoints: {
-      health: '/api/v1/health',
-      invoices: '/api/v1/invoices',
-      payments: '/api/v1/payments',
-      receipts: '/api/v1/receipts'
-    }
   })
 })
 
 // Swagger UI - Must be at root level
 app.get(
-  '/swagger',
+  '/api/docs',
   swaggerUI({
     url: '/api/v1/openapi.json'
   })
@@ -117,13 +109,7 @@ serve({
 }, (info) => {
   console.log(`✅ Server is running on http://localhost:${info.port}`)
   console.log(`\n📚 Documentation:`)
-  console.log(`   Swagger UI: http://localhost:${info.port}/swagger`)
-  console.log(`   OpenAPI Spec: http://localhost:${info.port}/api/v1/openapi.json`)
+  console.log(`   OpenAPI Spec: http://localhost:${info.port}/api/openapi.json`)
   console.log(`   Interactive Docs: http://localhost:${info.port}/api/docs`)
-  console.log(`\n🌐 API Endpoints:`)
-  console.log(`   Health Check: http://localhost:${info.port}/api/v1/health`)
-  console.log(`   💰 Invoices: http://localhost:${info.port}/api/v1/invoices`)
-  console.log(`   💳 Payments: http://localhost:${info.port}/api/v1/payments`)
-  console.log(`   🧾 Receipts: http://localhost:${info.port}/api/v1/receipts`)
   console.log(`\n🎯 Ready to accept requests!`)
 })

@@ -84,7 +84,19 @@ CREATE DATABASE payment_system;
 npm run db:push
 ```
 
-5. **Start development server**
+5. **Seed sample data (Optional)**
+```bash
+# Populate database with test data
+npm run db:seed
+```
+
+This will create:
+- 5 sample invoices with different statuses
+- Multiple payments (full, partial, overpayment scenarios)
+- Auto-generated receipts
+- Ready-to-test data in Swagger UI
+
+6. **Start development server**
 ```bash
 npm run dev
 ```

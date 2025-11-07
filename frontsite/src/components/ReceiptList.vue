@@ -18,21 +18,25 @@ const selectedReceipt = ref<Receipt | null>(null)
 const fetchReceipts = async () => {
   loading.value = true
   try {
-    // Fetch all payments first, then get their receipts
-    await paymentStore.fetchPayments()
+    // Only fetch payments if not already loaded
+    if (paymentStore.payments.length === 0) {
+      await paymentStore.fetchPayments()
+    }
+
     const allReceipts: Receipt[] = []
 
-    for (const payment of paymentStore.payments) {
-      try {
-        const receipt = await paymentStore.fetchReceiptByPaymentId(payment.id)
-        if (receipt) {
-          allReceipts.push(receipt)
-        }
-      } catch (error) {
-        // Skip if receipt not found
-        console.warn(`Receipt not found for payment ${payment.id}`)
-      }
-    }
+    // Fetch receipts in parallel to avoid sequential N+1 requests
+    const receiptPromises = paymentStore.payments.map(payment =>
+      paymentStore.fetchReceiptByPaymentId(payment.id)
+        .then(receipt => receipt)
+        .catch(() => {
+          console.warn(`Receipt not found for payment ${payment.id}`)
+          return null
+        })
+    )
+
+    const results = await Promise.all(receiptPromises)
+    allReceipts.push(...results.filter((r): r is Receipt => r !== null))
 
     receipts.value = allReceipts
   } catch (error) {
@@ -48,7 +52,10 @@ const viewReceipt = (receipt: Receipt) => {
 }
 
 onMounted(async () => {
-  await fetchReceipts()
+  // Only fetch if receipts haven't been loaded yet
+  if (receipts.value.length === 0) {
+    await fetchReceipts()
+  }
 })
 </script>
 

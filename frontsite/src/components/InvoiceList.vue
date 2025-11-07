@@ -15,6 +15,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+
 import InvoiceForm from './InvoiceForm.vue'
 import PaymentForm from './PaymentForm.vue'
 
@@ -32,13 +41,14 @@ const selectedInvoice = ref<Invoice | null>(null)
 const isEditing = ref(false)
 
 const applyFilters = async () => {
+  const status = filters.value.status === '-' ? undefined : filters.value.status
   await paymentStore.fetchInvoices({
-    status: filters.value.status || undefined,
+    status,
   })
 }
 
 const resetFilters = async () => {
-  filters.value.status = ''
+  filters.value.status = '-'
   await paymentStore.fetchInvoices()
 }
 
@@ -97,7 +107,10 @@ const closeViewDialog = () => {
 }
 
 onMounted(async () => {
-  await paymentStore.fetchInvoices()
+  // Only fetch if invoices haven't been loaded yet or filters are applied
+  if (invoices.value.length === 0) {
+    await paymentStore.fetchInvoices()
+  }
 })
 </script>
 
@@ -122,20 +135,22 @@ onMounted(async () => {
         <div class="flex flex-wrap gap-4 mb-6">
           <div class="flex-1 min-w-[200px]">
             <Label class="mb-2" for="statusFilter">Status</Label>
-            <select
-              id="statusFilter"
-              v-model="filters.status"
-              @change="applyFilters"
-              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              <option value="">All Statuses</option>
-              <option value="draft">Draft</option>
-              <option value="pending">Pending</option>
-              <option value="partially_paid">Partially Paid</option>
-              <option value="paid">Paid</option>
-              <option value="cancelled">Cancelled</option>
-              <option value="overdue">Overdue</option>
-            </select>
+            <Select v-model="filters.status" @change="applyFilters">
+              <SelectTrigger>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="-">All Statuses</SelectItem>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="partially_paid">Partially Paid</SelectItem>
+                  <SelectItem value="paid">Paid</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                  <SelectItem value="overdue">Overdue</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div class="flex items-end">
             <Button @click="resetFilters" variant="outline" size="sm">

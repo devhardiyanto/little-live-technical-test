@@ -9,6 +9,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface Props {
   invoice: Invoice
@@ -140,19 +148,20 @@ onMounted(() => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
             <Label class="mb-2" for="paymentMethod">Payment Method</Label>
-            <select
-              id="paymentMethod"
-              v-model="form.paymentMethod"
-              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              required
-            >
-              <option value="">Select payment method</option>
-              <option value="cash">Cash</option>
-              <option value="bank_transfer">Bank Transfer</option>
-              <option value="credit_card">Credit Card</option>
-              <option value="debit_card">Debit Card</option>
-              <option value="e_wallet">E-Wallet</option>
-            </select>
+            <Select v-model="form.paymentMethod">
+              <SelectTrigger>
+                <SelectValue placeholder="Select payment method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="cash">Cash</SelectItem>
+                  <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                  <SelectItem value="credit_card">Credit Card</SelectItem>
+                  <SelectItem value="debit_card">Debit Card</SelectItem>
+                  <SelectItem value="e_wallet">E-Wallet</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div class="space-y-2">
             <Label class="mb-2" for="amount">Payment Amount</Label>

@@ -149,7 +149,7 @@ onMounted(() => {
           <div class="space-y-2">
             <Label class="mb-2" for="paymentMethod">Payment Method</Label>
             <Select v-model="form.paymentMethod">
-              <SelectTrigger>
+              <SelectTrigger class="w-full">
                 <SelectValue placeholder="Select payment method" />
               </SelectTrigger>
               <SelectContent>

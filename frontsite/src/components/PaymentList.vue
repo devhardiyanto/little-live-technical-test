@@ -100,7 +100,7 @@ onMounted(async () => {
           <div class="flex-1 min-w-[200px]">
             <Label class="mb-2" for="statusFilter">Status</Label>
 
-            <Select v-model="filters.status" @change="applyFilters">
+            <Select v-model="filters.status" @update:modelValue="applyFilters">
               <SelectTrigger class="w-full">
                 <SelectValue placeholder="Select a status" />
               </SelectTrigger>
@@ -119,7 +119,7 @@ onMounted(async () => {
           <div class="flex-1 min-w-[200px]">
             <Label class="mb-2" for="methodFilter">Payment Method</Label>
 
-            <Select v-model="filters.paymentMethod" @change="applyFilters">
+            <Select v-model="filters.paymentMethod" @update:modelValue="applyFilters">
               <SelectTrigger class="w-full">
                 <SelectValue placeholder="Select a payment method" />
               </SelectTrigger>
